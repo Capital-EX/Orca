@@ -30,6 +30,7 @@ import z from './library/z.js'
 import _bang from './library/_bang.js'
 import _comment from './library/_comment.js'
 import _midi from './library/_midi.js'
+import _tmidi from './library/_tmidi.js'
 import _mono from './library/_mono.js'
 import _keys from './library/_keys.js'
 import _cc from './library/_cc.js'
@@ -78,6 +79,7 @@ export default {
   '*': _bang,
   '#': _comment,
   ':': _midi,
+  '/': _tmidi,
   '%': _mono,
   '&': _keys,
   '!': _cc,

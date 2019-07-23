@@ -11,6 +11,7 @@ export default function Midi (terminal) {
 
   this.outputs = []
   this.inputs = []
+  this.toggle = []
   this.stack = []
 
   this.keys = {}
@@ -35,6 +36,14 @@ export default function Midi (terminal) {
       }
       this.stack[id].length--
     }
+
+    for (const id in this.toggle) {
+      if (!this.toggle[id].isPlaying) {
+        this.trigger(this.toggle[id], true);
+        this.toggle[id].isPlaying = true;
+      }
+    }
+    
   }
 
   this.trigger = function (item, down) {
@@ -79,6 +88,20 @@ export default function Midi (terminal) {
       if (this.stack[id].channel === channel && this.stack[id].octave === octave && this.stack[id].note === note) { this.release(item, id) }
     }
     this.stack.push(item)
+  }
+
+  // Add a new hold press
+  this.toggleNote = function (channel, octave, note, velocity) {
+    const item = { channel, octave, note, velocity, length, isPlaying: false }
+    // Retrigger duplicates
+    for (const id in this.toggle) {
+      if (this.toggle[id].channel === channel && this.toggle[id].octave === octave && this.toggle[id].note === note) { 
+        this.trigger(this.toggle[id], false);
+        delete this.toggle[id];
+        return
+      }
+    }
+    this.toggle.push(item);
   }
 
   this.update = function () {
